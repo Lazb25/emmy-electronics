@@ -13,7 +13,7 @@ function ProductPage() {
 
   useEffect(() => {
     // Fetch individual product details from backend
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`https://emmy-backend.onrender.com/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);

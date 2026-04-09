@@ -10,7 +10,7 @@ function HomePage({ searchQuery, selectedCategory, setSelectedCategory }) {
   const categories = ["All", "Smartphones", "Laptops", "Audio", "Gaming", "Cameras"];
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch('https://emmy-backend.onrender.com/api/products')
       .then(res => res.json())
       .then(data => {
         setProducts(data);
