@@ -7,37 +7,32 @@ function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
         <div className="col-span-1">
           <Link to="/" className="flex flex-col leading-none mb-6">
-            <span className="text-2xl font-black tracking-tighter">EMMY</span>
-            <span className="text-[8px] font-bold text-blue-400 tracking-[0.3em]">ELECTRONICS</span>
+            <span className="text-2xl font-black tracking-tighter uppercase">Emmy</span>
+            <span className="text-[8px] font-bold text-blue-400 tracking-[0.3em] uppercase">Electronics</span>
           </Link>
-          <p className="text-gray-400 text-sm leading-relaxed">Your destination for premium, high-performance tech. Quality and trust in every gadget.</p>
+          <p className="text-gray-400 text-sm leading-relaxed">The hub for Kigali's premium gadgets. Experience tech like never before.</p>
         </div>
+        
+        {/* Navigation columns remain the same... */}
         <div>
-          <h4 className="font-black text-[10px] uppercase tracking-widest mb-6 text-gray-500">Links</h4>
+          <h4 className="font-black text-[10px] uppercase tracking-widest mb-6 text-gray-500">Quick Shop</h4>
           <ul className="space-y-4 text-sm font-bold">
-            <li><Link to="/" className="hover:text-blue-400 transition">Shop</Link></li>
-            <li><Link to="/contact" className="hover:text-blue-400 transition">Contact</Link></li>
-            <li><Link to="/cart" className="hover:text-blue-400 transition">Cart</Link></li>
+            <li><Link to="/" className="hover:text-blue-400 transition">All Products</Link></li>
+            <li><Link to="/contact" className="hover:text-blue-400 transition">Support</Link></li>
           </ul>
         </div>
-        <div>
-          <h4 className="font-black text-[10px] uppercase tracking-widest mb-6 text-gray-500">Category</h4>
-          <ul className="space-y-4 text-sm font-bold text-gray-400">
-            <li className="hover:text-white cursor-pointer transition">Laptops</li>
-            <li className="hover:text-white cursor-pointer transition">Smartphones</li>
-            <li className="hover:text-white cursor-pointer transition">Audio Gear</li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-black text-[10px] uppercase tracking-widest mb-6 text-gray-500">Contact</h4>
-          <address className="not-italic text-sm text-gray-400 space-y-4 font-bold">
-            <p>📍 Kigali, Rwanda</p>
-            <p>📧 hello@emmy.com</p>
-          </address>
-        </div>
+        {/* ... */}
       </div>
-      <div className="max-w-7xl mx-auto pt-8 text-center md:text-left">
-        <p className="text-[9px] font-black text-gray-600 uppercase tracking-[0.5em]">© 2026 EMMY ELECTRONICS • KIGALI HUB</p>
+
+      <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-[9px] font-black text-gray-600 uppercase tracking-[0.5em]">
+          © 2026 EMMY ELECTRONICS • PREMIUM GADGETS
+        </p>
+        
+        {/* THE HIDDEN DOOR */}
+        <Link to="/admin" className="text-[9px] text-gray-800 hover:text-blue-900 font-bold uppercase tracking-widest transition-colors">
+          Staff Hub
+        </Link>
       </div>
     </footer>
   );

@@ -7,7 +7,7 @@ import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ContactPage from './pages/ContactPage';
-import AdminDashboard from './pages/AdminDashboard'; // Import this
+import AdminDashboard from './pages/AdminDashboard'; // 1. IMPORT
 import { CartProvider } from "./context/CartContext";
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
           <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage searchQuery={searchQuery} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />} />
@@ -26,9 +27,12 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/admin" element={<AdminDashboard />} /> {/* Admin Route */}
+              
+              {/* 2. ADMIN ROUTE */}
+              <Route path="/admin" element={<AdminDashboard />} /> 
             </Routes>
           </main>
+
           <Footer />
         </div>
       </Router>
