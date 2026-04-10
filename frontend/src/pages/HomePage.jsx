@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
@@ -6,11 +6,11 @@ function HomePage({ searchQuery, selectedCategory, setSelectedCategory }) {
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const productGridRef = useRef(null);
 
   const categories = ["All", "Smartphones", "Laptops", "Audio", "Gaming", "Cameras"];
 
   useEffect(() => {
-    // Make sure this URL matches your Render backend URL!
     fetch('https://emmy-backend.onrender.com/api/products') 
       .then(res => res.json())
       .then(data => {
@@ -20,51 +20,65 @@ function HomePage({ searchQuery, selectedCategory, setSelectedCategory }) {
       .catch(() => setLoading(false));
   }, []);
 
+  const scrollToProducts = () => {
+    productGridRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  if (loading) return <div className="p-20 text-center animate-pulse font-bold text-gray-400">Waking up server...</div>;
+  if (loading) return <div className="p-20 text-center animate-pulse font-black text-gray-300">WAKING UP SERVER...</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 md:py-8">
       
-      {/* --- HERO SECTION --- */}
-      <div className="relative h-48 md:h-80 lg:h-96 bg-gray-900 rounded-[24px] md:rounded-[40px] mb-8 md:mb-12 overflow-hidden flex items-center px-6 md:px-20 text-white shadow-xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" 
-          alt="Banner" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
-        <div className="relative z-20 max-w-md">
-          <h1 className="text-2xl md:text-5xl lg:text-7xl font-black leading-tight tracking-tighter">
-            Smart Tech. <br /> <span className="text-blue-400">Better Living.</span>
-          </h1>
-          <button className="mt-4 md:mt-8 bg-white text-gray-900 px-6 py-2.5 md:px-10 md:py-4 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">
-            Shop Now
-          </button>
+      {/* HERO SECTION */}
+      <div className="bg-white border border-gray-100 rounded-[32px] md:rounded-[50px] mb-12 md:mb-16 shadow-sm overflow-hidden">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between px-6 py-10 md:px-20 md:py-20 gap-10">
+          <div className="max-w-xl text-center md:text-left flex flex-col items-center md:items-start">
+            <span className="inline-block px-4 py-1.5 mb-4 text-[10px] font-black tracking-[0.3em] text-blue-600 bg-blue-50 rounded-full">
+              RWANDA'S TECH HUB
+            </span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-gray-950 leading-tight tracking-tighter mb-6">
+              Premium Tech. <br /> <span className="text-blue-600">Delivered.</span>
+            </h1>
+            <p className="text-gray-600 text-sm md:text-lg mb-10 max-w-md font-medium leading-relaxed">
+              Shop the latest genuine laptops, iPhones, and modern audio gear. Quality guaranteed, right here in Kigali.
+            </p>
+            <button 
+              onClick={scrollToProducts}
+              className="bg-gray-950 text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg active:scale-[0.98]"
+            >
+              Shop All Gadgets →
+            </button>
+          </div>
+
+          <div className="relative w-full max-w-[500px] flex items-center justify-center">
+            <div className="absolute inset-0 bg-blue-50 blur-[80px] rounded-full scale-110"></div>
+            <img 
+              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1000" 
+              alt="Tech Lineup" 
+              className="relative z-10 w-full object-contain drop-shadow-2xl"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 md:gap-10">
-        
-        {/* --- SIDEBAR / CATEGORY SCROLLER --- */}
+      {/* PRODUCT LAYOUT */}
+      <div ref={productGridRef} className="flex flex-col lg:flex-row gap-10 scroll-mt-24">
         <aside className="w-full lg:w-64 flex-shrink-0">
           <div className="sticky top-24">
-            <h2 className="hidden lg:block bg-gray-50 px-6 py-4 font-black text-gray-900 text-[10px] uppercase tracking-widest border border-gray-100 rounded-t-[20px]">Categories</h2>
-            {/* Scrollable list on mobile, vertical on desktop */}
-            <ul className="flex lg:flex-col overflow-x-auto lg:overflow-visible p-1 lg:p-2 bg-white lg:border border-gray-100 lg:rounded-b-[20px] gap-2 lg:gap-1 no-scrollbar">
+            <h2 className="hidden lg:block font-black text-gray-400 text-[10px] uppercase tracking-[0.3em] mb-6 ml-2">Shop By Category</h2>
+            <ul className="flex lg:flex-col overflow-x-auto lg:overflow-visible p-1 lg:p-0 gap-2 lg:gap-3 no-scrollbar">
               {categories.map(cat => (
                 <li 
                   key={cat} 
                   onClick={() => setSelectedCategory(cat)}
-                  className={`flex-shrink-0 px-5 py-2.5 lg:rounded-xl rounded-full cursor-pointer transition-all text-xs md:text-sm font-bold ${
-                    selectedCategory === cat 
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-200" 
-                      : "bg-gray-50 lg:bg-transparent text-gray-500 hover:text-blue-600"
+                  className={`flex-shrink-0 px-6 py-3 lg:rounded-2xl rounded-full cursor-pointer transition-all text-xs font-black uppercase tracking-widest ${
+                    selectedCategory === cat ? "bg-blue-600 text-white shadow-lg" : "bg-white text-gray-400 border border-gray-100"
                   }`}
                 >
                   {cat}
@@ -74,34 +88,28 @@ function HomePage({ searchQuery, selectedCategory, setSelectedCategory }) {
           </div>
         </aside>
 
-        {/* --- PRODUCT GRID --- */}
         <div className="flex-1">
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {filteredProducts.map(product => (
-              <div key={product.id} className="group bg-white rounded-2xl md:rounded-3xl p-3 md:p-5 border border-gray-100 hover:shadow-xl transition-all">
-                <div className="relative h-32 md:h-56 bg-gray-50 rounded-xl md:rounded-2xl mb-3 md:mb-5 flex items-center justify-center p-4">
-                  <img 
-                    src={product.image} 
-                    alt="" 
-                    className="max-w-full max-h-full object-contain drop-shadow-lg group-hover:scale-110 transition duration-500" 
-                  />
-                </div>
-                
-                <p className="text-[8px] md:text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">{product.category}</p>
-                <h3 className="font-bold text-gray-800 text-xs md:text-lg leading-tight mb-2 md:mb-4 truncate">{product.name}</h3>
-                
-                <div className="flex items-center justify-between pt-2 md:pt-4 border-t border-gray-50">
-                  <span className="text-sm md:text-2xl font-black text-gray-900">${product.price}</span>
-                  <button 
-                    onClick={() => addToCart(product)}
-                    className="bg-gray-900 text-white w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all active:scale-90"
-                  >
-                    <span className="text-lg">+</span>
-                  </button>
-                </div>
-                <Link to={`/product/${product.id}`} className="block text-center mt-3 text-[8px] md:text-[10px] font-black text-gray-300 hover:text-blue-600 uppercase tracking-widest">
-                  Details
+              <div key={product.id} className="group bg-white rounded-[32px] p-5 border border-gray-50 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col">
+                <Link to={`/product/${product.id}`} className="relative h-40 md:h-60 bg-gray-50 rounded-[24px] mb-6 flex items-center justify-center p-6 overflow-hidden">
+                  <img src={product.image} alt="" className="max-w-full max-h-full object-contain drop-shadow-xl group-hover:scale-110 transition duration-700" />
+                  <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 bg-white text-gray-900 text-[10px] font-black px-4 py-2 rounded-full shadow-xl transition-all translate-y-4 group-hover:translate-y-0 uppercase tracking-widest">View Details</span>
+                  </div>
                 </Link>
+
+                <Link to={`/product/${product.id}`}>
+                  <h3 className="font-bold text-gray-800 text-sm md:text-xl tracking-tight mb-4 truncate px-2 hover:text-blue-600">{product.name}</h3>
+                </Link>
+
+                <div className="mt-auto flex items-center justify-between px-2 pb-2">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Price</span>
+                    <span className="text-lg md:text-3xl font-black text-gray-900 tracking-tighter">${product.price}</span>
+                  </div>
+                  <button onClick={() => addToCart(product)} className="bg-gray-900 text-white w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg hover:bg-blue-600 transition-all active:scale-90">+</button>
+                </div>
               </div>
             ))}
           </div>
