@@ -1,39 +1,50 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 const app = express();
+const PORT = 5000;
 
 app.use(cors());
-app.use(express.json()); // This allows the server to read the data you send
+app.use(express.json());
 
-// 1. Product Schema
-const productSchema = new mongoose.Schema({
-  name: String,
-  price: Number,
-  category: String,
-  image: String,
-  description: String
-});
-
-const Product = mongoose.model('Product', productSchema);
-
-// 2. GET Route (Already working)
-app.get('/api/products', async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
-});
-
-// 3. POST Route (THE MISSING PIECE)
-// This is what the "Publish Product" button talks to
-app.post('/api/products', async (req, res) => {
-  try {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.status(201).json(newProduct);
-  } catch (error) {
-    res.status(400).json({ message: "Error saving product" });
+const products = [
+  { 
+    id: 1, 
+    name: "Google Pixel 8 Pro", 
+    price: 999, 
+    category: "Smartphones",
+    image: "/images/phone.jpg", // Path to your local image
+    rating: 4.8,
+    stock: 12
+  },
+  { 
+    id: 2, 
+    name: "Premium Laptop", 
+    price: 1299, 
+    category: "Laptops",
+    image: "/images/laptop.jpg", 
+    rating: 4.9,
+    stock: 8
+  },
+  { 
+    id: 3, 
+    name: "Sony Headphones", 
+    price: 349, 
+    category: "Audio",
+    image: "/images/headphone.jpg", 
+    rating: 4.7,
+    stock: 15
   }
+];
+
+app.get("/api/products", (req, res) => res.json(products));
+
+app.get("/api/products/:id", (req, res) => {
+  const product = products.find(p => p.id === parseInt(req.params.id));
+  product ? res.json(product) : res.status(404).send("Product not found");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.post("/api/checkout", (req, res) => {
+  res.json({ message: "Success", orderId: Date.now() });
+});
+
+app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
