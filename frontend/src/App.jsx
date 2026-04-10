@@ -7,6 +7,7 @@ import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ContactPage from './pages/ContactPage';
+import AdminDashboard from './pages/AdminDashboard'; // Import this
 import { CartProvider } from "./context/CartContext";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/admin" element={<AdminDashboard />} /> {/* Admin Route */}
             </Routes>
           </main>
           <Footer />
